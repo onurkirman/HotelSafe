@@ -121,5 +121,460 @@ void singleExec(){
 }
 
 void loop() {
+  char testChar;
+  EEPROM.get(21, testChar);
+  if(testChar != 1){
+    lcd.setCursor(4,3);
+    lcd.print("AA");
+  }
+  
+  int j = 0;
+  if(state == '0'){
+    lcd.clear();
+    lcd.setCursor(4,0);
+    lcd.print("Main Menu");
+    while(1){
+      char key = keypad.getKey();
+      if (key == '1' || key == '2' || key == '3' || key == '4') {
+        state = key;
+        key=0;
+        delay(100);
+        break;
+      }
+    }
+  }
+  
+  if(state == '1')
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Open/Lock Section A");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        tempPass[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    delay(1000);
+    if(!(strncmp(tempPass, masterKey, 4)))  // master key ile check ediyor
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section A - Master");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(0);  // call open/lock func
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else if (!(strncmp(tempPass, sideKeyA, 4)))  // side key A
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section A - Standard");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(0);  // call open/lock func
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else if (!(strncmp(tempPass, baitKey, 4)))  // bait key
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section A - Standard");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(0);  // call open/lock func
+      // blink the led
+      digitalWrite(2, HIGH);delay(100);
+      digitalWrite(2, LOW);delay(100);
+      digitalWrite(2, HIGH);delay(100);
+      digitalWrite(2, LOW);delay(100);
+      digitalWrite(2, HIGH);
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else  // Wrong Input
+    {
+      unsuccessful++;
+      SFA++;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Wrong Password");
+      delay(1000);
+      lcd.clear();
+      if(!(SFA < 3)){
+        state = '5';
+      }
+    }
+  }
+  else if(state == '2')
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Open/Lock Section B");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        tempPass[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    delay(1000);
+    if(!(strncmp(tempPass, masterKey, 4)))  // master key ile check ediyor
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section B - Master");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(1);  // call open/lock func
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else if (!(strncmp(tempPass, sideKeyB, 4)))  // side key B
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section B - Standard");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(1);  // call open/lock func
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else if (!(strncmp(tempPass, baitKey, 4)))  // bait key
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Section B - Standard");
+      lcd.setCursor(0,1);
+        lcd.print("Opening/Locking");
+      rotateMotor(1);  // call open/lock func
+      // blink the led
+      digitalWrite(2, HIGH);delay(100);
+      digitalWrite(2, LOW);delay(100);
+      digitalWrite(2, HIGH);delay(100);
+      digitalWrite(2, LOW);delay(100);
+      digitalWrite(2, HIGH);
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else  // Wrong Input
+    {
+      unsuccessful++;
+      SFA++;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Wrong Password");
+      delay(1000);
+      lcd.clear();
+      if(!(SFA < 3)){
+        state = '5';
+      }
+    }
+  }
+  else if(state == '3')  // Change Password
+  {
+    int j=0;
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Master Pass. Needed");
+    lcd.setCursor(0,1);
+    lcd.print("To Change Pass.");
+    lcd.setCursor(0,2);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        tempPass[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    delay(1000);
+    if(strncmp(tempPass, masterKey, 4))  // master key değilse
+    {
+      unsuccessful++;
+      lcd.clear();
+      lcd.print("Wrong Password");
+      delay(1000);
+      lcd.clear();
+      SFA++;
+      if(!(SFA < 3)){
+        state = '5';
+      }
+    }
+    else
+    {
+      successful++;
+      lcd.clear();
+      lcd.setCursor(0,0);
+        lcd.print("Change Password");
+      lcd.setCursor(0,1);
+        lcd.print("1M 2A 3B 4T");
+      lcd.setCursor(0,2);
+      while(1)
+      {
+        char key = keypad.getKey();
+        if(key){
+          changeKey(key);
+          break;
+        }
+      }
+      state = '0';
+    }
+  }
+  else if(state == '4')  // Report Attempts  
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    String str = "Suc. Attempts: " + String(successful) + ",";
+    lcd.print(str);
+    lcd.setCursor(0,1);
+    str = "UnSuc. Attempts: " + String(unsuccessful);
+    lcd.print(str);
+    lcd.setCursor(0,2);
+    str = "SFA: " + String(SFA);
+    lcd.print(str);
+    state = '0';
+    delay(5000);
+    lcd.clear();
+  }
+  else if (state == '5')  // Master Lock Screen
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("System Locked MP");
+    lcd.setCursor(0,1);
+    int j = 0;
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        tempPass[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    delay(1000);
+    if(!(strncmp(tempPass, masterKey, 4)))  // GOTO Main Screen
+    {
+      successful++;
+      SFA = 0;
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Lock is UnLocked!");
+      state = '0';
+      delay(1000);
+      lcd.clear();
+    }
+    else  // GOTO Time Lock Screen
+    {
+      unsuccessful++;
+      state = '6';
+      lcd.clear();
+    }
+  }
+  else if (state == '6')  // Time Lock Screen
+  {
+    for(int i = 0; i < 20; i++){
+      lcd.clear();
+      lcd.setCursor(0,0);
+      String str = "No access " + String(i+1) + " sec";
+      lcd.print(str);
+      delay(1000);
+    }
+    state = '5';
+  }
+  else{
+    state = '0';
+  }
+  
+}
 
+void changeKey(char st)
+{
+  if(st == '1') //Change Master Password
+  {
+    int j = 0;
+    lcd.clear();
+    lcd.print("Enter New Pass M");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        masterKey[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    EEPROM.put(1, masterKey);
+  }
+  else if (st == '2') // Change Section A Password
+  {
+    int j = 0;
+    lcd.clear();
+    lcd.print("Enter New Pass A");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        sideKeyA[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    EEPROM.put(5, sideKeyA);
+  }
+  else if (st == '3') // Change Section B Password
+  {
+    int j = 0;
+    lcd.clear();
+    lcd.print("Enter New Pass B");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        sideKeyB[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    EEPROM.put(9, sideKeyB);
+  }
+  else if (st == '4') // Change Bait Password
+  {
+    int j = 0;
+    lcd.clear();
+    lcd.print("Enter New Pass T");
+    lcd.setCursor(0,1);
+    while(j<4){
+      char key = keypad.getKey();
+      if(key){
+        baitKey[j++]=key;
+        lcd.print('*');
+      }
+      key=0;
+    }
+    EEPROM.put(13, baitKey);
+  }
+  delay(1000);
+  lcd.clear();
+  lcd.print("Pass is changed");
+  delay(1000);
+  lcd.clear();
+}
+
+void rotateMotor(boolean type)
+{
+  if(type){
+    if(lockstateB == 0){  // locked -> opened
+      lockstateB = 1;
+      //rotate twice left
+      delay(1000);
+      digitalWrite(4, HIGH);digitalWrite(3, HIGH);
+      delay(1000);
+      digitalWrite(4, LOW);digitalWrite(3, HIGH);
+      delay(1000);
+      digitalWrite(4, HIGH);digitalWrite(3, LOW);
+      delay(1000);
+      digitalWrite(4, LOW);digitalWrite(3, LOW);
+      delay(1000);
+      digitalWrite(4, HIGH);digitalWrite(3, HIGH);
+      delay(1000);
+      digitalWrite(4, LOW);digitalWrite(3, HIGH);
+      delay(1000);
+      digitalWrite(4, HIGH);digitalWrite(3, LOW);
+      delay(1000);
+      digitalWrite(4, LOW);digitalWrite(3, LOW);
+      delay(1000);
+    }else if (lockstateB == 1)  // opened -> locked
+    {
+      lockstateB = 0;
+      //rotate twice right
+      delay(1000);
+      digitalWrite(4, HIGH);digitalWrite(3, LOW);
+      delay(1000);   
+      digitalWrite(4, LOW);digitalWrite(3, HIGH);
+      delay(1000);   
+      digitalWrite(4, HIGH);digitalWrite(3, HIGH);
+      delay(1000);   
+      digitalWrite(4, LOW);digitalWrite(3, LOW);
+      delay(1000);  
+      digitalWrite(4, HIGH);digitalWrite(3, LOW);
+      delay(1000);   
+      digitalWrite(4, LOW);digitalWrite(3, HIGH);
+      delay(1000);   
+      digitalWrite(4, HIGH);digitalWrite(3, HIGH);
+      delay(1000);   
+      digitalWrite(4, LOW);digitalWrite(3, LOW);
+      delay(1000);
+    }
+  }else{
+    if(lockstateA == 0){  // locked -> opened
+      lockstateA = 1;
+      //rotate twice left
+      delay(1000);
+      digitalWrite(6, HIGH);digitalWrite(5, HIGH);
+      delay(1000);
+      digitalWrite(6, LOW);digitalWrite(5, HIGH);
+      delay(1000);
+      digitalWrite(6, HIGH);digitalWrite(5, LOW);
+      delay(1000);
+      digitalWrite(6, LOW);digitalWrite(5, LOW);
+      delay(1000);
+      digitalWrite(6, HIGH);digitalWrite(5, HIGH);
+      delay(1000);
+      digitalWrite(6, LOW);digitalWrite(5, HIGH);
+      delay(1000);
+      digitalWrite(6, HIGH);digitalWrite(5, LOW);
+      delay(1000);
+      digitalWrite(6, LOW);digitalWrite(5, LOW);
+      delay(1000);
+    }else if (lockstateA == 1)  // opened -> locked
+    {
+      lockstateA = 0;
+      //rotate twice right
+      delay(1000);
+      digitalWrite(6, HIGH);digitalWrite(5, LOW);
+      delay(1000);   
+      digitalWrite(6, LOW);digitalWrite(5, HIGH);
+      delay(1000);   
+      digitalWrite(6, HIGH);digitalWrite(5, HIGH);
+      delay(1000);   
+      digitalWrite(6, LOW);digitalWrite(5, LOW);
+      delay(1000);  
+      digitalWrite(6, HIGH);digitalWrite(5, LOW);
+      delay(1000);   
+      digitalWrite(6, LOW);digitalWrite(5, HIGH);
+      delay(1000);   
+      digitalWrite(6, HIGH);digitalWrite(5, HIGH);
+      delay(1000);   
+      digitalWrite(6, LOW);digitalWrite(5, LOW);
+      delay(1000);
+    }
+  }
 }
