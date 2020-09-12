@@ -171,8 +171,5 @@ Arduino restarted. Also, default Passwords are set according to shown in the lis
 - Proteus Arduino Library
 
 
-For more information please contact via e-mail onur.kirman@ozu.edu.tr
+**_Onur Kirman_**
 
-**_Onur Kirman - S009958_**
-
-**_Electrical and Electronics Engineering – Özyeğin University_**
