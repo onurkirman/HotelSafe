@@ -115,48 +115,44 @@ Arduino restarted. Also, default Passwords are set according to shown in the lis
 **A. Main Screen** (LCD: “Main Menu”) -> Enter 1, 2, 3 or 4
 
 **1. Open/Lock Section A** (LCD: “Open/Lock Section A”)
-    a) **Enter Master Password** - > open/lock section A with (LCD: Row1: “Section A - Master”),
-       (LCD: Row2: “Opening/Locking”) - > return Main Screen
-    b) **Enter Side Password 1** - > open/lock section A with (LCD: Row1: “Section A -
-       Standard”), (LCD: Row2: “Opening/Locking”) -> return Main Screen
-    c) **Enter Bait Password** - > open/lock section A with (LCD: Row1: “Section A - Standard”),
-       (LCD: Row2: “Opening/Locking”) and blink Emergency LED -> return Main Screen
-    d) **Enter Any Other Password** - > (LCD: “Wrong Password”) -> Increase Successive Failure
-       Attempts ( **SFA** ) counter -> if SFA < 3 return Open/Lock Section A, else GOTO Master
-       Lock Screen.
+    
+    a) **Enter Master Password** - > open/lock section A with (LCD: Row1: “Section A - Master”), (LCD: Row2: “Opening/Locking”) - > return Main Screen
+    
+    b) **Enter Side Password 1** - > open/lock section A with (LCD: Row1: “Section A - Standard”), (LCD: Row2: “Opening/Locking”) -> return Main Screen
+    
+    c) **Enter Bait Password** - > open/lock section A with (LCD: Row1: “Section A - Standard”), (LCD: Row2: “Opening/Locking”) and blink Emergency LED -> return Main Screen
+    
+    d) **Enter Any Other Password** - > (LCD: “Wrong Password”) -> Increase Successive Failure Attempts ( **SFA** ) counter -> if SFA < 3 return Open/Lock Section A, else GOTO Master Lock Screen.
+    
 **2. Open/Lock Section B** (LCD: “Open/Lock Section B”)
-    a) Enter Master Password - > open/lock section B with (LCD: Row1: “Section B - Master”),
-       (LCD: Row2: “Opening/Locking”) - > return Main Screen
-    b) Side Password 1 - > open/lock section B with (LCD: Row1: “Section B - Standard”), (LCD:
-       Row2: “Opening/Locking”) -> return Main Screen
-    c) Enter Bait Password - > open/lock section B with (LCD: Row1: “Section B - Standard”),
-       (LCD: Row2: “Opening/Locking”) and blink Emergency LED -> return Main Screen
-    d) Enter Any Other Password -> (LCD: “Wrong Password”) -> Increase Successive Failure
-       Attempts (SFA) counter -> if SFA < 3 return Open/Lock Section B, else GOTO Master
-       Lock Screen.
+    
+    a) Enter Master Password - > open/lock section B with (LCD: Row1: “Section B - Master”), (LCD: Row2: “Opening/Locking”) - > return Main Screen
+    
+    b) Side Password 1 - > open/lock section B with (LCD: Row1: “Section B - Standard”), (LCD: Row2: “Opening/Locking”) -> return Main Screen
+    
+    c) Enter Bait Password - > open/lock section B with (LCD: Row1: “Section B - Standard”), (LCD: Row2: “Opening/Locking”) and blink Emergency LED -> return Main Screen
+    
+    d) Enter Any Other Password -> (LCD: “Wrong Password”) -> Increase Successive Failure Attempts (SFA) counter -> if SFA < 3 return Open/Lock Section B, else GOTO Master Lock Screen.
+    
 **3. Change Password** (LCD: Row1: “Master Pass. Needed”), (LCD: Row2: “To Change Pass.”)
-    a) **Enter Master Password** - > Enter 1, 2, 3 or 4 (LCD: Row 1 :” Change Password”), (LCD:
-       Row2: “1M 2A 3B 4T)
-          - **Change Master Password** (LCD: “Enter New Pass M”) -> Enter New Password
-             - > Change the password (LCD: “Pass is changed”) -> return Main Screen
-          - **Change Section A Password** (LCD: “Enter New Pass A”) -> Enter New Password
-             - > Change the password (LCD: “Pass is changed”) -> return Main Screen
-          - **Change Section B Password** (LCD: “Enter New Pass B”) -> Enter New Password
-             - > Change the password (LCD: “Pass is changed”) -> return Main Screen
+    
+    a) **Enter Master Password** - > Enter 1, 2, 3 or 4 (LCD: Row 1 :” Change Password”), (LCD: Row2: “1M 2A 3B 4T)
+          - **Change Master Password** (LCD: “Enter New Pass M”) -> Enter New Password - > Change the password (LCD: “Pass is changed”) -> return Main Screen
+          - **Change Section A Password** (LCD: “Enter New Pass A”) -> Enter New Password - > Change the password (LCD: “Pass is changed”) -> return Main Screen
+          - **Change Section B Password** (LCD: “Enter New Pass B”) -> Enter New Password - > Change the password (LCD: “Pass is changed”) -> return Main Screen
+          - **Change Bait Password** (LCD: “Enter New Pass T”) -> Enter New Password -> Change the password (LCD: “Pass is changed”) -> return Main Screen
+    
+    b) **Enter Any Other Password** - > (LCD: “Wrong Password”) -> Increase Successive Failure Attempts (SFA) counter -> if SFA less than 3 return Change Password, else GOTO Master Lock Screen.
 
+**4. Report Previous Attempts** (LCD: Row1: “Suc. Attempts: XX”), (LCD: Row2: “UnSuc. Attempts: YY”), (LCD: Row3: “ SFA: ZZ”) after 5 seconds -> return Main Screen
 
-- **Change Bait Password** (LCD: “Enter New Pass T”) -> Enter New Password ->
-    Change the password (LCD: “Pass is changed”) -> return Main Screen
-b) **Enter Any Other Password** - > (LCD: “Wrong Password”) -> Increase Successive Failure
-Attempts (SFA) counter -> if SFA less than 3 return Change Password, else GOTO
-Master Lock Screen.
-**4. Report Previous Attempts** (LCD: Row1: “Suc. Attempts: XX”), (LCD: Row2: “UnSuc. Attempts:
-YY”), (LCD: Row3: “ SFA: ZZ”) after 5 seconds -> return Main Screen
 **5. Master Lock Screen** (LCD: “System Locked MP”)
-a) **Enter Master Password** - > (LCD: “Lock is UnLocked!”) GOTO Main Screen
-b) **Enter Any Other Password** - > GOTO Time Lock Screen
-**6. Time Lock Screen** (LCD: “No access %d sec”, countdown from 20)) -> wait 20 seconds -> return
-Master Lock Screen
+    
+    a) **Enter Master Password** - > (LCD: “Lock is UnLocked!”) GOTO Main Screen
+    
+    b) **Enter Any Other Password** - > GOTO Time Lock Screen
+
+**6. Time Lock Screen** (LCD: “No access %d sec”, countdown from 20)) -> wait 20 seconds -> return Master Lock Screen
 
 **Components Used:**
 
