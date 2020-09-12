@@ -18,6 +18,26 @@ byte colPins[COLS] = {13, 12, 11}; //connect to the column pinouts of the keypad
 LiquidCrystal lcd(A0, A1, A2, A3, A4, A5);
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
+// Variables used for Rotation
+int lockstateA = 1;  // starts as opened
+int lockstateB = 1;  // starts as opened
+
+// Variables Used Listed Here
+char masterKey[4] ;// masterKey
+char sideKeyA[4]  ;// sideKeyA
+char sideKeyB[4]  ;// sideKeyB
+char baitKey[4]   ;// baitKey
+char tempPass[4];  // temp password taken from user
+
+char state = '0';  // states
+
+int successful   = 0;  // total successful attempts
+int unsuccessful = 0;  // total unsuccessful attempts
+
+int SFA = 0;  //  Increase Successive Failure Attempts
+boolean toggle1 = 0;
+int secCount = 0;
+int sfaCheck = 0;
 
 void setup() {
   cli();
@@ -47,9 +67,46 @@ void setup() {
   // enable timer compare interrupt
   TIMSK1 |= (1 << OCIE1A);
   
+  
+  // checking whether initial values written or not.
+  char checkInit = EEPROM.read(0);
+  if(checkInit != '1'){
+    for(int j=0;j<20;j++)
+    EEPROM.write(j, '0');
+  }
+  
+  // if not written, write the default values
+  if(checkInit == '0'){
+    checkInit = '1';
+    EEPROM.write(0, checkInit);
+    singleExec();
+  }
+  
+  // initializing variables here
+  EEPROM.get( 1 , masterKey );
+  EEPROM.get( 5 , sideKeyA );
+  EEPROM.get( 9 , sideKeyB );
+  EEPROM.get( 13 , baitKey );
+  
   sei();
 }
 
+ISR(TIMER1_COMPA_vect){
+  if (secCount > 14){
+    digitalWrite(0, HIGH);
+    SFA = 0;
+    secCount = 0;
+  }
+  else if (SFA != sfaCheck){
+    digitalWrite(1, LOW);
+    sfaCheck = SFA;
+    digitalWrite(0, LOW);
+    secCount = 0;
+  }else{
+    digitalWrite(1, HIGH);
+    secCount++;
+  }
+}
 
 void singleExec(){
     char k1[4] = {'1','2','3','4'};  // default masterKey
